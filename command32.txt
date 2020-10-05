@@ -1,0 +1,11 @@
+printList
+pushReserve (postfix)
+printList
+printReserveSize
+printReserveTop
+convertReserve
+flipReserve
+popReserve (0)
+printList
+emptyReserve (0)
+printList

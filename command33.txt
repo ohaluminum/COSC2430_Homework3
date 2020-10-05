@@ -1,0 +1,5 @@
+printList
+pushReserve (all)
+printList
+emptyReserve (999)
+printList

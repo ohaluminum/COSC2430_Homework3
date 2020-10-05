@@ -1,0 +1,10 @@
+printList
+printListBackwards
+convertList (postfix)
+printList
+convertList (prefix)
+printList
+convertList (all)
+printList
+convertList (0)
+printList
