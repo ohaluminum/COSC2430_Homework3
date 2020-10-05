@@ -6,12 +6,12 @@ using namespace std;
 
 struct expression
 {
-    string info;
-    expression* prev;
-    expression* next;
+    string info = "";
+    expression* prev = nullptr;
+    expression* next = nullptr;
 };
 
-class expList
+class expressionList
 {
 private:
     expression* head;
@@ -20,11 +20,17 @@ private:
 
 public:
     //Default constructor
-    class expList()
+    class expressionList()
     {
         head = nullptr;
         tail = nullptr;
         size = 0;
+    }
+
+    //Getter
+    expression* getHead()
+    {
+        return head;
     }
 
     void addAtEnd(string info)
@@ -37,7 +43,7 @@ public:
         temp->next = nullptr;
 
         //3.Update the pointer
-        if (size = 0)
+        if (size == 0)
         {
             temp->prev = nullptr;
             head = temp;
@@ -59,6 +65,22 @@ public:
 
 };
 
+//Remove space from a string
+string removeSpace(string line)
+{
+    string newStr = "";
+
+    for (unsigned int i = 0; i < line.length(); i++)
+    {
+        if (line[i] != ' ')
+        {
+            newStr += line[i];
+        }
+    }
+
+    return newStr;
+}
+
 
 //MUNUALLY IMPLEMENT STACK
 
@@ -72,7 +94,7 @@ int main(int argc, char* argv[])
     //string command = am.get("command");
 
     //Test
-    string input = "input31.txt";
+    string input = "input33.txt";
     string output = "output31.txt";
     string command = "command31.txt";
 
@@ -84,8 +106,56 @@ int main(int argc, char* argv[])
     inFS.open(input);
     outFS.open(output);
 
+    try
+    {
+        //Throw exception if the file doesn't exist
+        if (!inFS.is_open())
+        {
+            throw runtime_error("ERROR: File not found");
+        }
+
+        //Throw exception if the file is empty
+        if (inFS.peek() == EOF)
+        {
+            throw runtime_error("ERROR: File is empty");
+        }
+
+        string originalLine = "";
+        string newLine = "";
+
+        expressionList EList;
+
+        // --------------------------------------------- ADD EXPRESSION -------------------------------------
+
+        while (getline(inFS, originalLine))
+        {
+            //Check if the line is empty
+            if (originalLine.empty())
+            {
+                continue;
+            }
+
+            newLine = removeSpace(originalLine);
+
+            EList.addAtEnd(newLine);
+        }
 
 
+
+        //Testing purpose
+        expression* temp = EList.getHead();
+
+        while (temp != nullptr)
+        {
+            cout << temp->info << endl;
+            temp = temp->next;
+        }
+
+    }
+    catch (runtime_error & e)
+    {
+        outFS << e.what() << endl;
+    }
 
     //Close files
     inFS.close();
