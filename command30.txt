@@ -1,1 +1,6 @@
+printList
 printListBackwards
+convertList (postfix)
+printList
+convertList (2)
+printList

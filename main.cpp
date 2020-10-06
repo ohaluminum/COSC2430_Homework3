@@ -5,127 +5,6 @@
 #include "ArgumentManager.h"
 using namespace std;
 
-struct expression
-{
-    string info = "";
-    expression* prev = nullptr;
-    expression* next = nullptr;
-};
-
-class expressionList
-{
-private:
-    expression* head;
-    expression* tail;
-    int size;
-
-public:
-    //Default constructor
-    class expressionList()
-    {
-        head = nullptr;
-        tail = nullptr;
-        size = 0;
-    }
-
-    //Getter
-    expression* getHead()
-    {
-        return head;
-    }
-
-    void addAtEnd(string info)
-    {
-        //1.Create a temp expression
-        expression* temp = new expression();
-
-        //2.Fill the data
-        temp->info = info;
-        temp->next = nullptr;
-
-        //3.Update the pointer
-        if (size == 0)
-        {
-            temp->prev = nullptr;
-            head = temp;
-            tail = temp;
-        }
-        else if (size > 0)
-        {
-            tail->next = temp;
-            temp->prev = tail;
-
-            tail = temp;
-        }
-
-        //4.Update the size
-        size++;
-    }
-
-    //Task 3: printList
-    void printList(ofstream& outFS)
-    {
-        outFS << "List:" << endl;
-
-        if (size == 0)
-        {
-            outFS << "EMPTY" << endl;
-        }
-        else if (size > 0)
-        {
-            expression* temp = new expression();
-            temp = head;
-
-            while (temp != nullptr)
-            {
-                outFS << temp->info << endl;
-                temp = temp->next;
-            }
-        }
-    }
-
-    //Task 4: printListBackwards
-    void printListBackwards(ofstream& outFS)
-    {
-        outFS << "Reversed List:" << endl;
-
-        if (size == 0)
-        {
-            outFS << "EMPTY" << endl;
-        }
-        else if (size > 0)
-        {
-            expression* temp = new expression();
-            temp = tail;
-
-            while (temp != nullptr)
-            {
-                outFS << temp->info << endl;
-                temp = temp->prev;
-            }
-        }
-    }
-
-
-
-};
-
-//Remove space from a string
-string removeSpace(string line)
-{
-    string newStr = "";
-
-    for (unsigned int i = 0; i < line.length(); i++)
-    {
-        if (line[i] != ' ')
-        {
-            newStr += line[i];
-        }
-    }
-
-    return newStr;
-}
-
 //Create a function to convert prefix to postfix
 void prefixToPostfix(string& expression)
 {
@@ -200,6 +79,277 @@ void postfixToPrefix(string& expression)
 
     expression = st.top();
 }
+
+struct expression
+{
+    string info = "";
+    expression* prev = nullptr;
+    expression* next = nullptr;
+};
+
+class expressionList
+{
+private:
+    expression* head;
+    expression* tail;
+    int size;
+
+public:
+    //Default constructor
+    class expressionList()
+    {
+        head = nullptr;
+        tail = nullptr;
+        size = 0;
+    }
+
+    //Getter
+    expression* getHead()
+    {
+        return head;
+    }
+
+    void addAtEnd(string info)
+    {
+        //1.Create a temp expression
+        expression* temp = new expression();
+
+        //2.Fill the data
+        temp->info = info;
+        temp->next = nullptr;
+
+        //3.Update the pointer
+        if (size == 0)
+        {
+            temp->prev = nullptr;
+            head = temp;
+            tail = temp;
+        }
+        else if (size > 0)
+        {
+            tail->next = temp;
+            temp->prev = tail;
+
+            tail = temp;
+        }
+
+        //4.Update the size
+        size++;
+    }
+
+    //Task 1: convertList
+    void convertList(string condition, istringstream& inSS)
+    {
+        expression* temp = new expression();
+        temp = head;
+
+        string bin;
+        string type; 
+        string expression;
+
+        if (condition == "prefix")
+        {
+            while (temp != nullptr)
+            {
+                bin = temp->info;
+                inSS.clear();
+                inSS.str(bin);
+
+                getline(inSS, type, ':');
+                getline(inSS, expression);
+                
+                if (type == "prefix")
+                {
+                    prefixToPostfix(expression);
+                    temp->info = "postfix:" + expression;
+                }
+
+                temp = temp->next;
+            }
+        }
+        else if (condition == "postfix")
+        {
+            while (temp != nullptr)
+            {
+                bin = temp->info;
+                inSS.clear();
+                inSS.str(bin);
+
+                getline(inSS, type, ':');
+                getline(inSS, expression);
+
+                if (type == "postfix")
+                {
+                    postfixToPrefix(expression);
+                    temp->info = "prefix:" + expression;
+                }
+
+                temp = temp->next;
+            }
+        }
+        else if (condition == "all")
+        {
+            while (temp != nullptr)
+            {
+                bin = temp->info;
+                inSS.clear();
+                inSS.str(bin);
+
+                getline(inSS, type, ':');
+                getline(inSS, expression);
+
+                if (type == "prefix")
+                {
+                    prefixToPostfix(expression);
+                    temp->info = "postfix:" + expression;
+                }
+
+                else if (type == "postfix")
+                {
+                    postfixToPrefix(expression);
+                    temp->info = "prefix:" + expression;
+                }
+
+                temp = temp->next;
+            }
+        }
+        else
+        {
+            int position = stoi(condition);
+
+            //Change the first node
+            if (position <= 0)
+            {
+                bin = head->info;
+                inSS.clear();
+                inSS.str(bin);
+
+                getline(inSS, type, ':');
+                getline(inSS, expression);
+
+                if (type == "prefix")
+                {
+                    prefixToPostfix(expression);
+                    head->info = "postfix:" + expression;
+                }
+                else if (type == "postfix")
+                {
+                    postfixToPrefix(expression);
+                    head->info = "prefix:" + expression;
+                }
+            }
+            else if (position > 0 && position < size)
+            {
+                //Move to the correct position
+                for (int i = 0; i < position; i++)
+                {
+                    temp = temp->next;
+                }
+
+                bin = temp->info;
+                inSS.clear();
+                inSS.str(bin);
+
+                getline(inSS, type, ':');
+                getline(inSS, expression);
+
+                if (type == "prefix")
+                {
+                    prefixToPostfix(expression);
+                    temp->info = "postfix:" + expression;
+                }
+                else if (type == "postfix")
+                {
+                    postfixToPrefix(expression);
+                    head->info = "prefix:" + expression;
+                }
+            }
+        }
+    }
+
+    //Task 3: printList
+    void printList(ofstream& outFS)
+    {
+        outFS << "List:" << endl;
+
+        if (size == 0)
+        {
+            outFS << "EMPTY" << endl;
+        }
+        else if (size > 0)
+        {
+            expression* temp = new expression();
+            temp = head;
+
+            while (temp != nullptr)
+            {
+                outFS << temp->info << endl;
+                temp = temp->next;
+            }
+        }
+
+        outFS << endl;
+    }
+
+    //Task 4: printListBackwards
+    void printListBackwards(ofstream& outFS)
+    {
+        outFS << "Reversed List:" << endl;
+
+        if (size == 0)
+        {
+            outFS << "EMPTY" << endl;
+        }
+        else if (size > 0)
+        {
+            expression* temp = new expression();
+            temp = tail;
+
+            while (temp != nullptr)
+            {
+                outFS << temp->info << endl;
+                temp = temp->prev;
+            }
+        }
+
+        outFS << endl;
+    }
+
+
+
+};
+
+//Remove space from a string
+string removeSpace(string line)
+{
+    string newStr = "";
+
+    for (unsigned int i = 0; i < line.length(); i++)
+    {
+        if (line[i] != ' ')
+        {
+            newStr += line[i];
+        }
+    }
+
+    return newStr;
+}
+
+//Check if the command line contains parenthese
+bool hasParentheses(string line)
+{
+    for (int i = 0; i < line.length(); i++)
+    {
+        if (line[i] == '(')
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 
 
 //MUNUALLY IMPLEMENT STACK
@@ -282,6 +432,9 @@ int main(int argc, char* argv[])
         }
 
         string commandLine;
+        string commandType;
+        string commandObject;
+        bool hasMoreCommand;
 
         while (getline(inFS, commandLine))
         {
@@ -291,17 +444,44 @@ int main(int argc, char* argv[])
                 continue;
             }
 
-            //Task 3
-            if (commandLine == "printList")
+            hasMoreCommand = hasParentheses(commandLine);
+
+            if (hasMoreCommand)
             {
-                EList.printList(outFS);
+                inSS.clear();
+                inSS.str(commandLine);
+
+                getline(inSS, commandType, '(');
+                getline(inSS, commandObject, ')');
+
+                //Task 1
+                if (commandType == "convertList ")
+                {
+                    EList.convertList(commandObject, inSS);
+                }
+
+
+
+            }
+            else
+            {
+                //Task 3
+                if (commandLine == "printList")
+                {
+                    EList.printList(outFS);
+                }
+
+                //Task 4
+                else if (commandLine == "printListBackwards")
+                {
+                    EList.printListBackwards(outFS);
+                }
+
             }
 
-            //Task 4
-            else if (commandLine == "printListBackwards")
-            {
-                EList.printListBackwards(outFS);
-            }
+            
+
+            
 
             
         }
