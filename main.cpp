@@ -67,8 +67,6 @@ public:
     {
         outFS << "List:" << endl;
 
-        cout << size << endl;
-
         if (size == 0)
         {
             outFS << "EMPTY" << endl;
@@ -82,6 +80,28 @@ public:
             {
                 outFS << temp->info << endl;
                 temp = temp->next;
+            }
+        }
+    }
+
+    //Task 4: printListBackwards
+    void printListBackwards(ofstream& outFS)
+    {
+        outFS << "Reversed List:" << endl;
+
+        if (size == 0)
+        {
+            outFS << "EMPTY" << endl;
+        }
+        else if (size > 0)
+        {
+            expression* temp = new expression();
+            temp = tail;
+
+            while (temp != nullptr)
+            {
+                outFS << temp->info << endl;
+                temp = temp->prev;
             }
         }
     }
@@ -271,9 +291,16 @@ int main(int argc, char* argv[])
                 continue;
             }
 
+            //Task 3
             if (commandLine == "printList")
             {
                 EList.printList(outFS);
+            }
+
+            //Task 4
+            else if (commandLine == "printListBackwards")
+            {
+                EList.printListBackwards(outFS);
             }
 
             

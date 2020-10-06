@@ -1,6 +1,6 @@
-List:
-postfix:BAC-*
-prefix:+A*B/C-EF
-postfix:FE-C/B*A+
-postfix:AB-C-D/
+Reversed List:
 postfix:AB-CF*-D/E+
+postfix:AB-C-D/
+postfix:FE-C/B*A+
+prefix:+A*B/C-EF
+postfix:BAC-*
