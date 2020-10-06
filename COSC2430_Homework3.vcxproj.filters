@@ -51,6 +51,9 @@
     <Text Include="output33.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="input30.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="test3.sh">

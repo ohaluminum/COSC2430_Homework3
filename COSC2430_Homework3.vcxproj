@@ -162,6 +162,7 @@
     <Text Include="output31.txt" />
     <Text Include="output32.txt" />
     <Text Include="output33.txt" />
+    <Text Include="input30.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test3.sh" />

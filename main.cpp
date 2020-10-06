@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <stack>
 #include "ArgumentManager.h"
 using namespace std;
 
@@ -81,8 +82,87 @@ string removeSpace(string line)
     return newStr;
 }
 
+//Create a function to convert prefix to postfix
+void prefixToPostfix(string& expression)
+{
+    stack<string> st;
+    string operand;
+    string first;
+    string second;
+    string newStr;
+
+    //Parsing the string from right to left
+    for (int i = expression.length() - 1; i >= 0; i--)
+    {
+        //If prefix[i] is operand (A-Z/a-z)
+        if (isalpha(expression[i]))
+        {
+            operand = "";
+            operand += expression[i];
+
+            st.push(operand);
+        }
+
+        //If the prefix[i] is operator (+ - * /)
+        else
+        {
+            first = st.top();
+            st.pop();
+
+            second = st.top();
+            st.pop();
+
+            newStr = first + second + expression[i];
+            st.push(newStr);
+        }
+    }
+
+    expression = st.top();
+}
+
+//Create a function to convert postfix to prefix
+void postfixToPrefix(string& expression)
+{
+    stack<string> st;
+    string operand;
+    string first;
+    string second;
+    string newStr;
+
+    for (int i = 0; i < expression.length(); i++)
+    {
+        //If prefix[i] is operand (A-Z/a-z)
+        if (isalpha(expression[i]))
+        {
+            operand = "";
+            operand += expression[i];
+
+            st.push(operand);
+        }
+
+        //If the prefix[i] is operator (+ - * /)
+        else
+        {
+            second = st.top();
+            st.pop();
+
+            first = st.top();
+            st.pop();
+
+            newStr = expression[i] + first + second;
+            st.push(newStr);
+        }
+    }
+
+    expression = st.top();
+}
+
 
 //MUNUALLY IMPLEMENT STACK
+
+
+
+// --------------------------------------------- MAIN FUNCTION --------------------------------------------
 
 int main(int argc, char* argv[])
 {
@@ -94,7 +174,7 @@ int main(int argc, char* argv[])
     //string command = am.get("command");
 
     //Test
-    string input = "input33.txt";
+    string input = "input30.txt";
     string output = "output31.txt";
     string command = "command31.txt";
 
@@ -136,6 +216,8 @@ int main(int argc, char* argv[])
             }
 
             newLine = removeSpace(originalLine);
+
+
 
             EList.addAtEnd(newLine);
         }
