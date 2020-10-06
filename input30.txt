@@ -1,1 +1,5 @@
-AB+CD-*
+postfix: BAC-*
+prefix:+A*B/C-EF
+postfix:FE-C/B*A+
+postfix:AB-C-D/
+postfix:AB-CF*-D / E+

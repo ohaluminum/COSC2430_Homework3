@@ -62,6 +62,30 @@ public:
         size++;
     }
 
+    //Task 3: printList
+    void printList(ofstream& outFS)
+    {
+        outFS << "List:" << endl;
+
+        cout << size << endl;
+
+        if (size == 0)
+        {
+            outFS << "EMPTY" << endl;
+        }
+        else if (size > 0)
+        {
+            expression* temp = new expression();
+            temp = head;
+
+            while (temp != nullptr)
+            {
+                outFS << temp->info << endl;
+                temp = temp->next;
+            }
+        }
+    }
+
 
 
 };
@@ -129,7 +153,7 @@ void postfixToPrefix(string& expression)
     string second;
     string newStr;
 
-    for (int i = 0; i < expression.length(); i++)
+    for (unsigned int i = 0; i < expression.length(); i++)
     {
         //If prefix[i] is operand (A-Z/a-z)
         if (isalpha(expression[i]))
@@ -176,18 +200,18 @@ int main(int argc, char* argv[])
     //Test
     string input = "input30.txt";
     string output = "output31.txt";
-    string command = "command31.txt";
+    string command = "command30.txt";
 
     ifstream inFS;
     ofstream outFS;
     istringstream inSS;
 
-    //Open input file
-    inFS.open(input);
-    outFS.open(output);
-
     try
     {
+        //Open input file and output file  
+        inFS.open(input);
+        outFS.open(output);
+
         //Throw exception if the file doesn't exist
         if (!inFS.is_open())
         {
@@ -216,11 +240,59 @@ int main(int argc, char* argv[])
             }
 
             newLine = removeSpace(originalLine);
-
-
-
             EList.addAtEnd(newLine);
         }
+
+        //Close input file
+        inFS.close();
+
+        //Open command file
+        inFS.open(command);
+
+        //Throw exception if the file doesn't exist
+        if (!inFS.is_open())
+        {
+            throw runtime_error("ERROR: File not found");
+        }
+
+        //Throw exception if the file is empty
+        if (inFS.peek() == EOF)
+        {
+            throw runtime_error("ERROR: File is empty");
+        }
+
+        string commandLine;
+
+        while (getline(inFS, commandLine))
+        {
+            //Check if the line is empty
+            if (commandLine.empty())
+            {
+                continue;
+            }
+
+            if (commandLine == "printList")
+            {
+                EList.printList(outFS);
+            }
+
+            
+        }
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -238,6 +310,8 @@ int main(int argc, char* argv[])
     {
         outFS << e.what() << endl;
     }
+
+    
 
     //Close files
     inFS.close();
