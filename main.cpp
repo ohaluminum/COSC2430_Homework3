@@ -109,6 +109,12 @@ public:
         return head;
     }
 
+    expression* getTail()
+    {
+        return tail;
+    }
+
+    // -------------------------------------------------- ADD FUNCTION ----------------------------------- 
     void addAtEnd(string info)
     {
         //1.Create a temp expression
@@ -135,6 +141,118 @@ public:
 
         //4.Update the size
         size++;
+    }
+
+    // -------------------------------------------------- REMOVE FUNCTION ------------------------------------------
+    void removeAtBeg()
+    {
+        //1.Create a temp expression
+        expression* temp = new expression;
+
+        //2.Update the pointer
+        if (size == 0)
+        {
+            return;
+        }
+
+        else if (size == 1)
+        {
+            head = nullptr;
+            tail = nullptr;
+        }
+
+        else if (size > 1)
+        {
+            temp = head;
+            head = head->next;
+            head->prev = nullptr;
+        }
+
+        //3.Delete the temp expression
+        delete temp;
+
+        //4.Update the size
+        size--;
+    }
+
+    void removeAtMid(int pos)
+    {
+        //1.Create a temp expression
+        expression* temp = new expression;
+
+        //2.Update the pointer
+        if (size == 0)
+        {
+            return;
+        }
+
+        //Invailid position
+        if (pos >= size)
+        {
+            return;
+        }
+
+        if (pos <= 0)
+        {
+            removeAtBeg();
+            return;
+        }
+        else if (pos == size - 1)
+        {
+            removeAtEnd();
+            return;
+        }
+        else
+        {
+            expression* previous = new expression;
+            previous = head;
+
+            for (int i = 0; i < pos - 1; i++)
+            {
+                previous = previous->next;
+            }
+
+            temp = previous->next;
+            previous->next = temp->next;
+            temp->next->prev = previous;
+        }
+
+        //3.Delete the temp expression
+        delete temp;
+
+        //4.Update the size
+        size--;
+    }
+
+    void removeAtEnd()
+    {
+        //1.Create a temp expression
+        expression* temp = new expression;
+
+        //2.Update the pointer
+        if (size == 0)
+        {
+            return;
+        }
+
+        else if (size == 1)
+        {
+            head = nullptr;
+            tail = nullptr;
+        }
+
+        else if (size > 1)
+        {
+            temp = tail;
+            tail = tail->prev;
+            tail->next = nullptr;
+        }
+
+        //3.Delete the temp expression
+        delete temp;
+
+        //4.Update the size
+        size--;
     }
 
     //Task 1: convertList
@@ -267,6 +385,12 @@ public:
         }
     }
 
+    //Task 2: removeList
+    void removeList(string condition, istringstream& inSS)
+    {
+        
+    }
+
     //Task 3: printList
     void printList(ofstream& outFS)
     {
@@ -338,7 +462,7 @@ string removeSpace(string line)
 //Check if the command line contains parenthese
 bool hasParentheses(string line)
 {
-    for (int i = 0; i < line.length(); i++)
+    for (unsigned int i = 0; i < line.length(); i++)
     {
         if (line[i] == '(')
         {
@@ -454,10 +578,16 @@ int main(int argc, char* argv[])
                 getline(inSS, commandType, '(');
                 getline(inSS, commandObject, ')');
 
-                //Task 1
+                //Task 1: convertList()
                 if (commandType == "convertList ")
                 {
                     EList.convertList(commandObject, inSS);
+                }
+
+                //Task 2: removeList()
+                else if (commandType == "removeList ")
+                {
+
                 }
 
 
@@ -465,13 +595,13 @@ int main(int argc, char* argv[])
             }
             else
             {
-                //Task 3
+                //Task 3: printList()
                 if (commandLine == "printList")
                 {
                     EList.printList(outFS);
                 }
 
-                //Task 4
+                //Task 4: printListBackwards()
                 else if (commandLine == "printListBackwards")
                 {
                     EList.printListBackwards(outFS);
@@ -485,6 +615,7 @@ int main(int argc, char* argv[])
 
             
         }
+
 
         
 
@@ -511,6 +642,20 @@ int main(int argc, char* argv[])
             cout << temp->info << endl;
             temp = temp->next;
         }
+
+        cout << endl;
+
+        EList.removeAtMid(3);
+
+        //Testing purpose
+        temp = EList.getTail();
+
+        while (temp != nullptr)
+        {
+            cout << temp->info << endl;
+            temp = temp->prev;
+        }
+
 
     }
     catch (runtime_error & e)
