@@ -1,14 +1,112 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <stack>
 #include "ArgumentManager.h"
 using namespace std;
+
+// ------------------------------------------------ STACK ------------------------------------------------
+
+struct node
+{
+    string info = "";
+    node* next = nullptr;
+};
+
+class stack
+{
+private:
+    node* topNode;
+
+public:
+    //Default contructor
+    stack()
+    {
+        topNode = nullptr;
+    }
+
+    bool isEmpty()
+    {
+        if (topNode == nullptr)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    void push(string newStr)
+    {
+        node* temp = new node;
+        temp->info = newStr;
+
+        temp->next = topNode;
+        topNode = temp;
+    }
+
+    string top()
+    {
+        //Check if the stack is empty
+        if (!isEmpty())
+        {
+            return topNode->info;
+        }
+        else
+        {
+            cout << "Stack is empty." << endl;
+        }
+    }
+
+    void pop()
+    {
+        if (!isEmpty())
+        {
+            node* temp = new node;
+            temp = topNode;
+
+            topNode = topNode->next;
+            delete temp;
+        }
+        else
+        {
+            cout << "Stack is empty." << endl;
+        }
+    }
+};
+
+//Remove space from a string
+string removeSpace(string line)
+{
+    string newStr = "";
+
+    for (unsigned int i = 0; i < line.length(); i++)
+    {
+        if (line[i] != ' ')
+        {
+            newStr += line[i];
+        }
+    }
+
+    return newStr;
+}
+
+//Check if the command line contains parenthese
+bool hasParentheses(string line)
+{
+    for (unsigned int i = 0; i < line.length(); i++)
+    {
+        if (line[i] == '(')
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 //Create a function to convert prefix to postfix
 void prefixToPostfix(string& expression)
 {
-    stack<string> st;
+    stack st;
     string operand;
     string first;
     string second;
@@ -46,7 +144,7 @@ void prefixToPostfix(string& expression)
 //Create a function to convert postfix to prefix
 void postfixToPrefix(string& expression)
 {
-    stack<string> st;
+    stack st;
     string operand;
     string first;
     string second;
@@ -261,6 +359,7 @@ public:
     }
 
     // -----------------------------------------------------SEARCH FUNCTION ---------------------------------
+
     int searchExpression(string condition, istringstream& inSS)
     {
         int counter = 0;
@@ -509,47 +608,8 @@ public:
 
         outFS << endl;
     }
-
-
-
 };
 
-//Remove space from a string
-string removeSpace(string line)
-{
-    string newStr = "";
-
-    for (unsigned int i = 0; i < line.length(); i++)
-    {
-        if (line[i] != ' ')
-        {
-            newStr += line[i];
-        }
-    }
-
-    return newStr;
-}
-
-//Check if the command line contains parenthese
-bool hasParentheses(string line)
-{
-    for (unsigned int i = 0; i < line.length(); i++)
-    {
-        if (line[i] == '(')
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-
-
-
-
-//MUNUALLY IMPLEMENT STACK
 
 
 
@@ -683,6 +743,9 @@ int main(int argc, char* argv[])
 
 
 
+
+
+
             }
             else
             {
@@ -697,6 +760,11 @@ int main(int argc, char* argv[])
                 {
                     EList.printListBackwards(outFS);
                 }
+
+
+
+
+
 
             }
 
