@@ -28,7 +28,7 @@ public:
 
     bool isEmpty()
     {
-        if (topNode == nullptr)
+        if (size == 0)
         {
             return true;
         }
@@ -50,19 +50,23 @@ public:
     string top()
     {
         //Check if the stack is empty
-        if (!isEmpty())
+        if (isEmpty())
         {
-            return topNode->info;
+            exit(1);
         }
         else
         {
-            exit(1);
+            return topNode->info;
         }
     }
 
     void pop()
     {
-        if (!isEmpty())
+        if (isEmpty())
+        {
+            exit(1);            
+        }
+        else
         {
             node* temp = new node;
             temp = topNode;
@@ -71,10 +75,6 @@ public:
             delete temp;
 
             size--;
-        }
-        else
-        {
-            exit(1);
         }
     }
 
@@ -97,6 +97,41 @@ public:
         }
     }
 };
+
+//Task 7: flipReserve()
+void insertAtLast(stack& st, string element)
+{
+    if (st.isEmpty())
+    {
+        st.push(element);
+        return;
+    }
+
+    string topElement;
+    topElement = st.top();
+    st.pop();
+
+    insertAtLast(st, element);
+
+    st.push(topElement);
+}
+
+void flipReserve(stack& st)
+{
+    if (st.isEmpty())
+    {
+        return;
+    }
+
+    //Store and pop out the element one by one
+    string temp;
+    temp = st.top();
+    st.pop();
+
+    flipReserve(st);
+
+    insertAtLast(st, temp);
+}
 
 // ----------------------------------------------- HELPER FUNCTION ------------------------------------------
 
@@ -206,30 +241,33 @@ void postfixToPrefix(string& expression)
 }
 
 //Task 9: convertReserve()
-void convertReserve(stack st, istringstream& inSS)
+void convertReserve(stack& st, istringstream& inSS)
 {
     string bin;
     string type;
     string expression;
 
-    bin = st.top();
-    st.pop();
-    inSS.clear();
-    inSS.str(bin);
-
-    getline(inSS, type, ':');
-    getline(inSS, expression);
-
-    if (type == "prefix")
+    if (!st.isEmpty())
     {
-        prefixToPostfix(expression);
-        st.push("postfix:" + expression);
-    }
+        bin = st.top();
+        st.pop();
+        inSS.clear();
+        inSS.str(bin);
 
-    else if (type == "postfix")
-    {
-        postfixToPrefix(expression);
-        st.push("prefix:" + expression);
+        getline(inSS, type, ':');
+        getline(inSS, expression);
+
+        if (type == "prefix")
+        {
+            prefixToPostfix(expression);
+            st.push("postfix:" + expression);
+        }
+
+        else if (type == "postfix")
+        {
+            postfixToPrefix(expression);
+            st.push("prefix:" + expression);
+        }
     }
 }
 
@@ -283,7 +321,7 @@ public:
         temp->prev = nullptr;
 
         //3.Update the pointer
-        if (size = 0)
+        if (size == 0)
         {
             temp->next = nullptr;
             head = temp;
@@ -339,6 +377,8 @@ public:
             temp->prev = previous;
             temp->next->prev = temp;
         }
+
+        //4.Update the size
         size++;
     }
 
@@ -932,19 +972,25 @@ int main(int argc, char* argv[])
                         deletedExp = ReservedStack.top();
                         ReservedStack.pop();
 
-
+                        EList.addAtMid(deletedExp, insertPosition);
                     }
-                    
-
-
                 }
 
+                //Task 11:  emptyReserve()
+                else if (commandType == "emptyReserve ")
+                {
+                    insertPosition = stoi(commandObject);
 
+                    while (!ReservedStack.isEmpty())
+                    {
+                        deletedExp = ReservedStack.top();
+                        ReservedStack.pop();
 
-
-
-
+                        EList.addAtMid(deletedExp, insertPosition);
+                    }
+                }
             }
+
             else
             {
                 //Task 3: printList()
@@ -959,8 +1005,11 @@ int main(int argc, char* argv[])
                     EList.printListBackwards(outFS);
                 }
 
-
-
+                //Task 7: flipReserve()
+                else if (commandLine == "flipReserve")
+                {
+                    flipReserve(ReservedStack);
+                }
 
                 //Task 8: printReserveSize()
                 else if (commandLine == "printReserveSize")
@@ -979,38 +1028,8 @@ int main(int argc, char* argv[])
                 {
                     ReservedStack.printReserveTop(outFS);
                 }
-
-
-
-
-
-
             }
-
-            
-
-            
-
-            
         }
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         //Testing purpose
         expression* temp = EList.getHead();
@@ -1040,8 +1059,6 @@ int main(int argc, char* argv[])
     {
         outFS << e.what() << endl;
     }
-
-    
 
     //Close files
     inFS.close();

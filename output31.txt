@@ -6,28 +6,9 @@ postfix:AB-C-D/
 postfix:AB-CF*-D/E+
 
 List:
-postfix:BAC-*
-postfix:ABCEF-/*+
-postfix:FE-C/B*A+
-postfix:AB-C-D/
-postfix:AB-CF*-D/E+
+EMPTY
 
-List:
-postfix:BAC-*
-postfix:ABCEF-/*+
-postfix:FE-C/B*A+
-postfix:AB-C-D/
-postfix:AB-CF*-D/E+
+Reserve Size: 5
 
-Reserve Size: 0
-
-Reserve Size: 1
-
-Top of Reserve: postfix:FE-C/B*A+
-
-List:
-postfix:BAC-*
-postfix:ABCEF-/*+
-postfix:AB-C-D/
-postfix:AB-CF*-D/E+
+Top of Reserve: postfix:BAC-*
 

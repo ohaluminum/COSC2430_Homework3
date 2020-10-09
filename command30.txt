@@ -1,11 +1,6 @@
 printList
-convertList (prefix)
-printList
-removeList (prefix)
+pushReserve (all)
 printList
 printReserveSize
-pushReserve (2)
-printReserveSize
+flipReserve
 printReserveTop
-popReserve (0)
-printList
