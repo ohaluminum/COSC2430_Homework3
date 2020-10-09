@@ -4,6 +4,38 @@
 #include "ArgumentManager.h"
 using namespace std;
 
+// ----------------------------------------------- HELPER FUNCTION ------------------------------------------
+
+//Remove space from a string
+string removeSpace(string line)
+{
+    string newStr = "";
+
+    for (unsigned int i = 0; i < line.length(); i++)
+    {
+        if (line[i] != ' ')
+        {
+            newStr += line[i];
+        }
+    }
+
+    return newStr;
+}
+
+//Check if the command line contains parenthese
+bool hasParentheses(string line)
+{
+    for (unsigned int i = 0; i < line.length(); i++)
+    {
+        if (line[i] == '(')
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 // ------------------------------------------------ STACK ------------------------------------------------
 
 struct node
@@ -133,37 +165,7 @@ void flipReserve(stack& st)
     insertAtLast(st, temp);
 }
 
-// ----------------------------------------------- HELPER FUNCTION ------------------------------------------
 
-//Remove space from a string
-string removeSpace(string line)
-{
-    string newStr = "";
-
-    for (unsigned int i = 0; i < line.length(); i++)
-    {
-        if (line[i] != ' ')
-        {
-            newStr += line[i];
-        }
-    }
-
-    return newStr;
-}
-
-//Check if the command line contains parenthese
-bool hasParentheses(string line)
-{
-    for (unsigned int i = 0; i < line.length(); i++)
-    {
-        if (line[i] == '(')
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
 
 //Create a function to convert prefix to postfix
 void prefixToPostfix(string& expression)
@@ -271,6 +273,7 @@ void convertReserve(stack& st, istringstream& inSS)
     }
 }
 
+// ------------------------------------------- LINKED LIST ---------------------------------------
 struct expression
 {
     string info = "";
@@ -310,7 +313,7 @@ public:
         return size;
     }
 
-    // -------------------------------------------------- ADD FUNCTION ----------------------------------- 
+    // ------------------------------------ ADD FUNCTION ----------------------------------- 
     void addAtBeg(string info)
     {
         //1.Create a temp expression
@@ -410,7 +413,7 @@ public:
         size++;
     }
 
-    // -------------------------------------------------- REMOVE FUNCTION ------------------------------------------
+    // --------------------------------- REMOVE FUNCTION ------------------------------------------
     string removeAtBeg()
     {
         string deletedStr = "";
@@ -543,7 +546,7 @@ public:
         return deletedStr;
     }
 
-    // -----------------------------------------------------SEARCH FUNCTION ---------------------------------
+    // ----------------------------------SEARCH FUNCTION ---------------------------------
 
     int searchExpression(string condition, istringstream& inSS)
     {
@@ -573,7 +576,7 @@ public:
         return counter;
     }
 
-    // -------------------------------------------------- OTHER FUNCTIONALITY ----------------------------------
+    // ------------------------------ OTHER FUNCTIONALITY ----------------------------------
 
     //Task 1: convertList
     void convertList(string condition, istringstream& inSS)
@@ -799,10 +802,7 @@ public:
     }
 };
 
-
-
-
-// --------------------------------------------- MAIN FUNCTION --------------------------------------------
+// ---------------------------------------- MAIN FUNCTION --------------------------------------------
 
 int main(int argc, char* argv[])
 {
@@ -814,9 +814,9 @@ int main(int argc, char* argv[])
     //string command = am.get("command");
 
     //Test
-    string input = "input30.txt";
-    string output = "output31.txt";
-    string command = "command30.txt";
+    string input = "input33.txt";
+    string output = "output33.txt";
+    string command = "command33.txt";
 
     ifstream inFS;
     ofstream outFS;
@@ -846,7 +846,7 @@ int main(int argc, char* argv[])
         expressionList EList;
         stack ReservedStack;
 
-        // --------------------------------------------- ADD EXPRESSION -------------------------------------
+        // ----------------------------------- ADD EXPRESSION -------------------------------------
 
         while (getline(inFS, originalLine))
         {
@@ -1052,8 +1052,6 @@ int main(int argc, char* argv[])
             cout << temp->info << endl;
             temp = temp->prev;
         }
-
-
     }
     catch (runtime_error & e)
     {

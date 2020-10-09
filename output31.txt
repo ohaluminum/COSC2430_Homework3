@@ -1,14 +1,24 @@
 List:
-postfix:BAC-*
-prefix:+A*B/C-EF
-postfix:FE-C/B*A+
-postfix:AB-C-D/
-postfix:AB-CF*-D/E+
+postfix:AB+CD-*
+prefix:+*ABC
+
+Reversed List:
+prefix:+*ABC
+postfix:AB+CD-*
 
 List:
-EMPTY
+prefix:*+AB-CD
+prefix:+*ABC
 
-Reserve Size: 5
+List:
+postfix:AB+CD-*
+postfix:AB*C+
 
-Top of Reserve: postfix:BAC-*
+List:
+prefix:*+AB-CD
+prefix:+*ABC
+
+List:
+postfix:AB+CD-*
+prefix:+*ABC
 
