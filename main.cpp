@@ -84,34 +84,6 @@ public:
         outFS << "Reserve Size: " << size << endl << endl;
     }
 
-    //Task 9: convertReserve()
-    void convertReserve(istringstream& inSS)
-    {
-        string bin;
-        string type;
-        string expression;
-
-        bin = top();
-        pop();
-        inSS.clear();
-        inSS.str(bin);
-
-        getline(inSS, type, ':');
-        getline(inSS, expression);
-
-        if (type == "prefix")
-        {
-            prefixToPostfix(expression);
-            push("postfix:" + expression);
-        }
-
-        else if (type == "postfix")
-        {
-            postfixToPrefix(expression);
-            push("prefix:" + expression);
-        }
-    }
-
     //Task 10: printReserveTop()
     void printReserveTop(ofstream& outFS)
     {
@@ -233,6 +205,34 @@ void postfixToPrefix(string& expression)
     expression = st.top();
 }
 
+//Task 9: convertReserve()
+void convertReserve(stack st, istringstream& inSS)
+{
+    string bin;
+    string type;
+    string expression;
+
+    bin = st.top();
+    st.pop();
+    inSS.clear();
+    inSS.str(bin);
+
+    getline(inSS, type, ':');
+    getline(inSS, expression);
+
+    if (type == "prefix")
+    {
+        prefixToPostfix(expression);
+        st.push("postfix:" + expression);
+    }
+
+    else if (type == "postfix")
+    {
+        postfixToPrefix(expression);
+        st.push("prefix:" + expression);
+    }
+}
+
 struct expression
 {
     string info = "";
@@ -303,21 +303,23 @@ public:
     }
 
     // -------------------------------------------------- REMOVE FUNCTION ------------------------------------------
-    void removeAtBeg()
+    string removeAtBeg()
     {
         string deletedStr = "";
+
+        if (size == 0)
+        {
+            return deletedStr;
+        }
 
         //1.Create a temp expression
         expression* temp = new expression;
 
         //2.Update the pointer
-        if (size == 0)
+        if (size == 1)
         {
-            return;
-        }
-
-        else if (size == 1)
-        {
+            //Store info
+            deletedStr = head->info;
             head = nullptr;
             tail = nullptr;
         }
@@ -325,6 +327,8 @@ public:
         else if (size > 1)
         {
             temp = head;
+            deletedStr = temp->info;
+
             head = head->next;
             head->prev = nullptr;
         }
@@ -334,34 +338,36 @@ public:
 
         //4.Update the size
         size--;
+
+        return deletedStr;
     }
 
-    void removeAtMid(int pos)
+    string removeAtMid(int pos)
     {
-        //1.Create a temp expression
-        expression* temp = new expression;
+        string deletedStr = "";
 
-        //2.Update the pointer
         if (size == 0)
         {
-            return;
+            return deletedStr;
         }
 
         //Invailid position
         if (pos >= size)
         {
-            return;
+            return deletedStr;
         }
 
+        //1.Create a temp expression
+        expression* temp = new expression;
+
+        //2.Update the pointer
         if (pos <= 0)
         {
-            removeAtBeg();
-            return;
+            return removeAtBeg();
         }
         else if (pos == size - 1)
         {
-            removeAtEnd();
-            return;
+            return removeAtEnd();
         }
         else
         {
@@ -374,6 +380,8 @@ public:
             }
 
             temp = previous->next;
+            deletedStr = temp->info;
+
             previous->next = temp->next;
             temp->next->prev = previous;
         }
@@ -383,21 +391,28 @@ public:
 
         //4.Update the size
         size--;
+
+        return deletedStr;
     }
 
-    void removeAtEnd()
+    string removeAtEnd()
     {
+        string deletedStr = "";
+
+        if (size == 0)
+        {
+            return deletedStr;
+        }
+
         //1.Create a temp expression
         expression* temp = new expression;
 
         //2.Update the pointer
-        if (size == 0)
+        if (size == 1)
         {
-            return;
-        }
+            //Store info
+            deletedStr = head->info;
 
-        else if (size == 1)
-        {
             head = nullptr;
             tail = nullptr;
         }
@@ -405,6 +420,8 @@ public:
         else if (size > 1)
         {
             temp = tail;
+            deletedStr = tail->info;
+
             tail = tail->prev;
             tail->next = nullptr;
         }
@@ -414,6 +431,8 @@ public:
 
         //4.Update the size
         size--;
+
+        return deletedStr;
     }
 
     // -----------------------------------------------------SEARCH FUNCTION ---------------------------------
@@ -579,8 +598,10 @@ public:
     }
 
     //Task 2: removeList
-    void removeList(string condition, istringstream& inSS)
+    string removeList(string condition, istringstream& inSS)
     {
+        string deletedStr = "";
+
         if (condition == "prefix" || condition == "postfix")
         {
             expression* temp = new expression();
@@ -600,8 +621,7 @@ public:
 
                 if (type == condition)
                 {
-                    removeAtMid(index);
-                    break;
+                    return removeAtMid(index);
                 }
 
                 temp = temp->next;
@@ -610,13 +630,16 @@ public:
         } 
         else if (condition == "all")
         {
-            removeAtEnd();
+            return removeAtBeg();
         }
         else
         {
             int position = stoi(condition);
-            removeAtMid(position);
+            return removeAtMid(position);
         }
+
+        //Make sure something retured
+        return deletedStr;
     }
 
     //Task 3: printList
@@ -683,7 +706,7 @@ int main(int argc, char* argv[])
     //string command = am.get("command");
 
     //Test
-    string input = "input31.txt";
+    string input = "input30.txt";
     string output = "output31.txt";
     string command = "command30.txt";
 
@@ -752,6 +775,7 @@ int main(int argc, char* argv[])
         string commandObject;
         bool hasMoreCommand;
         int numOfRemoval = 0;
+        string deletedExp;
 
         while (getline(inFS, commandLine))
         {
@@ -780,7 +804,7 @@ int main(int argc, char* argv[])
                 //Task 2: removeList()
                 else if (commandType == "removeList ")
                 {
-                    //Detemine the number of 
+                    //Detemine the number of deleted expression
                     if (commandObject == "prefix" || commandObject == "postfix")
                     {
                         numOfRemoval = EList.searchExpression(commandObject, inSS);
@@ -796,17 +820,37 @@ int main(int argc, char* argv[])
 
                     for (int i = 0; i < numOfRemoval; i++)
                     {
-                        EList.removeList(commandObject, inSS);
+                        deletedExp = EList.removeList(commandObject, inSS);
                     }
                 }
 
                 //Task 5: pushReserve()
                 else if (commandType == "pushReserve ")
                 {
+                    //Detemine the number of deleted expression
+                    if (commandObject == "prefix" || commandObject == "postfix")
+                    {
+                        numOfRemoval = EList.searchExpression(commandObject, inSS);
+                    }
+                    else if (commandObject == "all")
+                    {
+                        numOfRemoval = EList.getSize();
+                    }
+                    else
+                    {
+                        numOfRemoval = 1;
+                    }
 
+                    for (int i = 0; i < numOfRemoval; i++)
+                    {
+                        deletedExp = EList.removeList(commandObject, inSS);
 
-
-
+                        //Check if delete an expression
+                        if (deletedExp != "")
+                        {
+                            ReservedStack.push(deletedExp);
+                        }
+                    }
                 }
 
 
@@ -836,6 +880,12 @@ int main(int argc, char* argv[])
                 else if (commandLine == "printReserveSize")
                 {
                     ReservedStack.printReserveSize(outFS);
+                }
+
+                //Task 9: convertReserve()
+                else if (commandLine == "convertReserve")
+                {
+                    convertReserve(ReservedStack, inSS);
                 }
 
                 //Task 10: printReserveTop()
@@ -887,7 +937,7 @@ int main(int argc, char* argv[])
 
         cout << endl;
 
-        EList.removeAtMid(3);
+        deletedExp = EList.removeAtMid(3);
 
         //Testing purpose
         temp = EList.getTail();

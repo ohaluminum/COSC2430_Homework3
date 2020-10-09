@@ -1,6 +1,10 @@
 printList
 convertList (prefix)
 printList
-removeList (1)
+removeList (prefix)
 printList
 printReserveSize
+pushReserve (2)
+printReserveSize
+printReserveTop
+printList

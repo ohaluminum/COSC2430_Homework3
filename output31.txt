@@ -1,13 +1,33 @@
 List:
-postfix:AB+CD-*
-prefix:+*ABC
+postfix:BAC-*
+prefix:+A*B/C-EF
+postfix:FE-C/B*A+
+postfix:AB-C-D/
+postfix:AB-CF*-D/E+
 
 List:
-postfix:AB+CD-*
-postfix:AB*C+
+postfix:BAC-*
+postfix:ABCEF-/*+
+postfix:FE-C/B*A+
+postfix:AB-C-D/
+postfix:AB-CF*-D/E+
 
 List:
-postfix:AB+CD-*
+postfix:BAC-*
+postfix:ABCEF-/*+
+postfix:FE-C/B*A+
+postfix:AB-C-D/
+postfix:AB-CF*-D/E+
 
 Reserve Size: 0
+
+Reserve Size: 1
+
+Top of Reserve: postfix:FE-C/B*A+
+
+List:
+postfix:BAC-*
+postfix:ABCEF-/*+
+postfix:AB-C-D/
+postfix:AB-CF*-D/E+
 
