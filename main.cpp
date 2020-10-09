@@ -84,6 +84,34 @@ public:
         outFS << "Reserve Size: " << size << endl << endl;
     }
 
+    //Task 9: convertReserve()
+    void convertReserve(istringstream& inSS)
+    {
+        string bin;
+        string type;
+        string expression;
+
+        bin = top();
+        pop();
+        inSS.clear();
+        inSS.str(bin);
+
+        getline(inSS, type, ':');
+        getline(inSS, expression);
+
+        if (type == "prefix")
+        {
+            prefixToPostfix(expression);
+            push("postfix:" + expression);
+        }
+
+        else if (type == "postfix")
+        {
+            postfixToPrefix(expression);
+            push("prefix:" + expression);
+        }
+    }
+
     //Task 10: printReserveTop()
     void printReserveTop(ofstream& outFS)
     {
@@ -808,6 +836,12 @@ int main(int argc, char* argv[])
                 else if (commandLine == "printReserveSize")
                 {
                     ReservedStack.printReserveSize(outFS);
+                }
+
+                //Task 10: printReserveTop()
+                else if (commandLine == "printReserveTop")
+                {
+                    ReservedStack.printReserveTop(outFS);
                 }
 
 
