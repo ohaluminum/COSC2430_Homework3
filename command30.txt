@@ -7,4 +7,5 @@ printReserveSize
 pushReserve (2)
 printReserveSize
 printReserveTop
+popReserve (0)
 printList

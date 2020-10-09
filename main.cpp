@@ -273,6 +273,74 @@ public:
     }
 
     // -------------------------------------------------- ADD FUNCTION ----------------------------------- 
+    void addAtBeg(string info)
+    {
+        //1.Create a temp expression
+        expression* temp = new expression;
+
+        //2.Fill the data
+        temp->info = info;
+        temp->prev = nullptr;
+
+        //3.Update the pointer
+        if (size = 0)
+        {
+            temp->next = nullptr;
+            head = temp;
+            tail = temp;
+        }
+        else if (size > 0)
+        {
+            head->prev = temp;
+            temp->next = head;
+
+            head = temp;
+        }
+
+        //4.Update the size
+        size++;
+    }
+
+    void addAtMid(string info, int pos)
+    {
+        if (pos <= 0)
+        {
+            addAtBeg(info);
+            return;
+        }
+
+        else if (pos >= size)
+        {
+            addAtEnd(info);
+            return;
+        }
+
+        else
+        {
+            //1.Create a temp expression
+            expression* temp = new expression;
+            temp = head;
+
+            //2.Fill the data
+            temp->info = info;
+
+            //3.Update the pointer
+            expression* previous = new expression;
+            previous = head;
+
+            for (int i = 0; i < pos - 1; i++)
+            {
+                previous = previous->next;
+            }
+
+            temp->next = previous->next;
+            previous->next = temp;
+
+            temp->prev = previous;
+            temp->next->prev = temp;
+        }
+        size++;
+    }
 
     void addAtEnd(string info)
     {
@@ -776,6 +844,7 @@ int main(int argc, char* argv[])
         bool hasMoreCommand;
         int numOfRemoval = 0;
         string deletedExp;
+        int insertPosition = 0;
 
         while (getline(inFS, commandLine))
         {
@@ -851,6 +920,23 @@ int main(int argc, char* argv[])
                             ReservedStack.push(deletedExp);
                         }
                     }
+                }
+
+                //Task 6: popReserve()
+                else if (commandType == "popReserve ")
+                {
+                    insertPosition = stoi(commandObject);
+
+                    if (!ReservedStack.isEmpty())
+                    {
+                        deletedExp = ReservedStack.top();
+                        ReservedStack.pop();
+
+
+                    }
+                    
+
+
                 }
 
 
