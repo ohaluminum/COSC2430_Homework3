@@ -1,6 +1,5 @@
 printList
-printListBackwards
-convertList (postfix)
+convertList (prefix)
 printList
-convertList (2)
+removeList (1)
 printList

@@ -114,6 +114,11 @@ public:
         return tail;
     }
 
+    int getSize()
+    {
+        return size;
+    }
+
     // -------------------------------------------------- ADD FUNCTION ----------------------------------- 
     void addAtEnd(string info)
     {
@@ -255,6 +260,37 @@ public:
         size--;
     }
 
+    // -----------------------------------------------------SEARCH FUNCTION ---------------------------------
+    int searchExpression(string condition, istringstream& inSS)
+    {
+        int counter = 0;
+        string bin;
+        string type;
+
+        expression* temp = new expression;
+        temp = head;
+
+        while (temp != nullptr)
+        {
+            bin = temp->info;
+            inSS.clear();
+            inSS.str(bin);
+
+            getline(inSS, type, ':');
+
+            if (type == condition)
+            {
+                counter++;
+            }
+
+            temp = temp->next;
+        }
+
+        return counter;
+    }
+
+    // -------------------------------------------------- OTHER FUNCTIONALITY ----------------------------------
+
     //Task 1: convertList
     void convertList(string condition, istringstream& inSS)
     {
@@ -388,7 +424,42 @@ public:
     //Task 2: removeList
     void removeList(string condition, istringstream& inSS)
     {
-        
+        if (condition == "prefix" || condition == "postfix")
+        {
+            expression* temp = new expression();
+            temp = head;
+
+            string bin;
+            string type;
+            int index = 0;
+
+            while (temp != nullptr)
+            {
+                bin = temp->info;
+                inSS.clear();
+                inSS.str(bin);
+
+                getline(inSS, type, ':');
+
+                if (type == condition)
+                {
+                    removeAtMid(index);
+                    break;
+                }
+
+                temp = temp->next;
+                index++;
+            }
+        } 
+        else if (condition == "all")
+        {
+            removeAtEnd();
+        }
+        else
+        {
+            int position = stoi(condition);
+            removeAtMid(position);
+        }
     }
 
     //Task 3: printList
@@ -476,6 +547,8 @@ bool hasParentheses(string line)
 
 
 
+
+
 //MUNUALLY IMPLEMENT STACK
 
 
@@ -559,6 +632,7 @@ int main(int argc, char* argv[])
         string commandType;
         string commandObject;
         bool hasMoreCommand;
+        int numOfRemoval = 0;
 
         while (getline(inFS, commandLine))
         {
@@ -587,7 +661,24 @@ int main(int argc, char* argv[])
                 //Task 2: removeList()
                 else if (commandType == "removeList ")
                 {
+                    //Detemine the number of 
+                    if (commandObject == "prefix" || commandObject == "postfix")
+                    {
+                        numOfRemoval = EList.searchExpression(commandObject, inSS);
+                    }
+                    else if (commandObject == "all")
+                    {
+                        numOfRemoval = EList.getSize();
+                    }
+                    else
+                    {
+                        numOfRemoval = 1;
+                    }
 
+                    for (int i = 0; i < numOfRemoval; i++)
+                    {
+                        EList.removeList(commandObject, inSS);
+                    }
                 }
 
 

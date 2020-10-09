@@ -5,24 +5,16 @@ postfix:FE-C/B*A+
 postfix:AB-C-D/
 postfix:AB-CF*-D/E+
 
-Reversed List:
-postfix:AB-CF*-D/E+
-postfix:AB-C-D/
-postfix:FE-C/B*A+
-prefix:+A*B/C-EF
+List:
 postfix:BAC-*
-
-List:
-prefix:*B-AC
-prefix:+A*B/C-EF
-prefix:+*/-FECBA
-prefix:/--ABCD
-prefix:+/--AB*CFDE
-
-List:
-prefix:*B-AC
-prefix:+A*B/C-EF
+postfix:ABCEF-/*+
 postfix:FE-C/B*A+
-prefix:/--ABCD
-prefix:+/--AB*CFDE
+postfix:AB-C-D/
+postfix:AB-CF*-D/E+
+
+List:
+postfix:BAC-*
+postfix:FE-C/B*A+
+postfix:AB-C-D/
+postfix:AB-CF*-D/E+
 
