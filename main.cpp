@@ -16,12 +16,14 @@ class stack
 {
 private:
     node* topNode;
+    int size;
 
 public:
     //Default contructor
     stack()
     {
         topNode = nullptr;
+        size = 0;
     }
 
     bool isEmpty()
@@ -41,6 +43,8 @@ public:
 
         temp->next = topNode;
         topNode = temp;
+
+        size++;
     }
 
     string top()
@@ -52,7 +56,7 @@ public:
         }
         else
         {
-            cout << "Stack is empty." << endl;
+            exit(1);
         }
     }
 
@@ -65,13 +69,36 @@ public:
 
             topNode = topNode->next;
             delete temp;
+
+            size--;
         }
         else
         {
-            cout << "Stack is empty." << endl;
+            exit(1);
+        }
+    }
+
+    //Task 8: printReserveSize()
+    void printReserveSize(ofstream& outFS)
+    {
+        outFS << "Reserve Size: " << size << endl << endl;
+    }
+
+    //Task 10: printReserveTop()
+    void printReserveTop(ofstream& outFS)
+    {
+        if (topNode == nullptr)
+        {
+            outFS << "Top of Reserve: EMPTY" << endl << endl;
+        }
+        else
+        {
+            outFS << "Top of Reserve: " << top() << endl << endl;
         }
     }
 };
+
+// ----------------------------------------------- HELPER FUNCTION ------------------------------------------
 
 //Remove space from a string
 string removeSpace(string line)
@@ -218,6 +245,7 @@ public:
     }
 
     // -------------------------------------------------- ADD FUNCTION ----------------------------------- 
+
     void addAtEnd(string info)
     {
         //1.Create a temp expression
@@ -249,6 +277,8 @@ public:
     // -------------------------------------------------- REMOVE FUNCTION ------------------------------------------
     void removeAtBeg()
     {
+        string deletedStr = "";
+
         //1.Create a temp expression
         expression* temp = new expression;
 
@@ -625,7 +655,7 @@ int main(int argc, char* argv[])
     //string command = am.get("command");
 
     //Test
-    string input = "input30.txt";
+    string input = "input31.txt";
     string output = "output31.txt";
     string command = "command30.txt";
 
@@ -655,6 +685,7 @@ int main(int argc, char* argv[])
         string newLine = "";
 
         expressionList EList;
+        stack ReservedStack;
 
         // --------------------------------------------- ADD EXPRESSION -------------------------------------
 
@@ -741,6 +772,15 @@ int main(int argc, char* argv[])
                     }
                 }
 
+                //Task 5: pushReserve()
+                else if (commandType == "pushReserve ")
+                {
+
+
+
+
+                }
+
 
 
 
@@ -759,6 +799,15 @@ int main(int argc, char* argv[])
                 else if (commandLine == "printListBackwards")
                 {
                     EList.printListBackwards(outFS);
+                }
+
+
+
+
+                //Task 8: printReserveSize()
+                else if (commandLine == "printReserveSize")
+                {
+                    ReservedStack.printReserveSize(outFS);
                 }
 
 
